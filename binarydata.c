@@ -31,9 +31,9 @@ int save(){
 		fwrite(current,sizeof(CONTACT), 1, contactsFile);
 		current = current->next;
 		contactsQuantity--;
-		printf("%d contacts saved\n", global.qtyContacts);
 		}
 		
+		printf("%d contacts saved\n", global.qtyContacts);
 		fclose(contactsFile);
 	}
 
