@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "contactstruct.h"
+#include "mainmenu.h"
 #include "staff_functions.h"
 
 int getNumber(char * word){
@@ -139,7 +140,23 @@ void printNodesWophones(CONTACT * nodeHead){
 }
 
 void exitProgram(){
-    exit(0);
+	BUFFER buffer;
+	int loopEnd = 0;
+	if(global.saved==0){
+		printf("Cambios no han sido guardados \n ¿Está seguro de continuar? (y/N)\n");
+		while(!loopEnd){
+			captureData(sizeof(BUFFER),&buffer);
+			if(!strcmp(buffer,"y")){
+				exit(0);
+			} else if(!strcmp(buffer,"N")){
+				showMainMenu();
+			} else {
+				printf("Has ingresado una opción inválida. Intenta de nuevo\n");
+			}
+		}
+	} else {
+		exit(0);
+	}
 }
 
 void setColorText(char color[12]){

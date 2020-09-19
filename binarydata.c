@@ -28,14 +28,16 @@ int save(){
 		return -1;
 	} else {
 		while(contactsQuantity){
-		printf("%s\n",current->firstName);
 		fwrite(current,sizeof(CONTACT), 1, contactsFile);
 		current = current->next;
 		contactsQuantity--;
+		printf("%d contacts saved\n", global.qtyContacts);
 		}
 		
 		fclose(contactsFile);
 	}
+
+	global.saved = 1;
 
 	return 0;
 }
@@ -79,7 +81,6 @@ int chargeData(){
 					current = start;
 					start->head = 1;
 					global.headNodes = start;
-					printf("Contacto: %s\n", start->firstName);
 				}
 
 			} else {
@@ -89,8 +90,6 @@ int chargeData(){
 				} else {
 					current= current->next;
 					fread(current, sizeof(CONTACT),1, contactsFile);
-					printf("Siguiente contacto: %s\n", current->firstName);
-				
 				}
 			}
 
@@ -99,6 +98,8 @@ int chargeData(){
 			fclose(contactsFile);
 			current ->next = NULL;
 	}
+
+	global.saved = 1;
 	
 	return 0;
     

@@ -61,6 +61,8 @@ void createRegister(){
     printf("Register recorded:\n");
     printNodesWphones(start);
     printf("\n\n");
+
+    global.saved = 0;
     
     showMainMenu();
 }
@@ -112,16 +114,42 @@ CONTACT * createNode(char * name, char * lastname, char phoneArray[MAXPHONE][siz
 }
 
 void showRegistry(CONTACT * nodeHead){
-    printNodesWophones(nodeHead);
+    printNodesWphones(nodeHead);
 }
 
 void exportdata(){
-	printf("Not built yet\n");
+	FILE * fp;
+	CONTACT * current;
+
+	if((fp=fopen("contacts.txt","w"))==NULL){
+		printf("Export process could not be finished\n");
+	}
+
+	current = global.headNodes;
+	
+	while(current){
+		fprintf(fp,"%s;%s;",current->firstName,current->lastName);
+		fprintf(fp,"%s;",current->phone_1);
+		fprintf(fp,"%s;",current->phone_2);
+		fprintf(fp,"%s;",current->phone_3);
+		fprintf(fp,"%s;",current->phone_4);
+		fprintf(fp,"%s;",current->phone_5);
+		fprintf(fp,"%s;",current->phone_6);
+		fprintf(fp,"%s;",current->phone_7);
+		fprintf(fp,"%s;",current->phone_8);
+		fprintf(fp,"%s;",current->phone_9);
+		fprintf(fp,"%s;",current->phone_10);
+		fprintf(fp,"\r\n");
+		current = current->next;
+	}
+	fclose(fp);
+	printf("%d contacts exported in contacts.txt\n",global.qtyContacts);
 }
 
 void seekRegister(){
 	CONTACT *current = NULL; 
 	BUFFER buffer;
+	PHONE phones[10]={0};
 	int number;
 	current = global.headNodes;	
 	
@@ -144,9 +172,35 @@ void seekRegister(){
 			while (current)
 			{
 				if(strstr(current->firstName,buffer)){
-					printf("[Id: %d] %s %s | Qty of phone numbers: %d\n",\
-							current->id, current->firstName,current->lastName,\
-							current->phoneQty);
+					printf("%s %s,\n",current->firstName, current->lastName);
+					switch (current->phoneQty) {
+						case 10:
+							strcpy(phones[9],current->phone_10);
+						case 9:
+							strcpy(phones[8],current->phone_9);
+						case 8:
+							strcpy(phones[7],current->phone_8);
+						case 7:
+							strcpy(phones[6],current->phone_7);
+						case 6:
+							strcpy(phones[5],current->phone_6);
+						case 5:
+							strcpy(phones[4],current->phone_5);
+						case 4:
+							strcpy(phones[3],current->phone_4);
+						case 3:
+							strcpy(phones[2],current->phone_3);
+						case 2:
+							strcpy(phones[1],current->phone_2);
+						case 1:
+							strcpy(phones[0],current->phone_1);
+							break;
+					}
+
+					for (int i=current->phoneQty-1; i>=0; i--) {
+						printf("Phone [%d]: %s\n",i+1,phones[i]);
+					}
+
 					current = current->next;
 				} else {
 					current = current->next;
@@ -162,8 +216,35 @@ void seekRegister(){
 			while (current)
 			{
 				if(strstr(current->lastName,buffer)){
-					printf("[Id: %d] %s %s \n",\
-							current->id, current->firstName,current->lastName);
+					printf("%s %s,\n",current->firstName, current->lastName);
+					switch (current->phoneQty) {
+						case 10:
+							strcpy(phones[9],current->phone_10);
+						case 9:
+							strcpy(phones[8],current->phone_9);
+						case 8:
+							strcpy(phones[7],current->phone_8);
+						case 7:
+							strcpy(phones[6],current->phone_7);
+						case 6:
+							strcpy(phones[5],current->phone_6);
+						case 5:
+							strcpy(phones[4],current->phone_5);
+						case 4:
+							strcpy(phones[3],current->phone_4);
+						case 3:
+							strcpy(phones[2],current->phone_3);
+						case 2:
+							strcpy(phones[1],current->phone_2);
+						case 1:
+							strcpy(phones[0],current->phone_1);
+							break;
+					}
+
+					for (int i=current->phoneQty-1; i>=0; i--) {
+						printf("Phone [%d]: %s\n",i+1,phones[i]);
+					}
+
 					current = current->next;
 				} else {
 					current = current->next;
@@ -214,22 +295,26 @@ void modifyRegister(){
 		} else {
 			printf("El Id pertenece al contacto %s %s\n", current->firstName, current->lastName);
 			setColorText("Cyan");
-			printf("1. Cambiar nombre, 2. Cambiar Apellido, 3. Agregar Número, 4. Eliminar número, 5. Modificar número\
-					, 6. Cancelar\n");
+			printf("1. Cambiar nombre, 2. Cambiar Apellido, 3. Agregar Número, 4. Eliminar número, 5. Modificar número,6. Cancelar\n");
 			captureData(sizeof(NUMBER), &buffer);
 			option = getNumber(buffer);
 			setColorText("Reset");
 
 			switch (option) {
 				case 1:
+					global.saved = 0;
+					printf("Previus Name: %s \n", current->firstName);
 					captureData(sizeof(FIRSTNAME), &buffer);
 					strcpy(current->firstName,buffer);
 					break;
 				case 2:
+					global.saved = 0;
+					printf("Previus Lastname: %s \n", current->lastName);
 					captureData(sizeof(LASTNAME), &buffer);
 					strcpy(current->lastName,buffer);
 					break;
 				case 3:
+					global.saved = 0;
 					switch (current->phoneQty) {
 						case 10:
 							printf("Max qty phones reached\n");
@@ -291,10 +376,14 @@ void modifyRegister(){
 					}
 					break;
 				case 4:
+					global.saved = 0;
 					current->phoneQty--;
 					break;
 				case 5:
+					global.saved = 0;
+					setColorText("Cyan");
 					printf("Cuál teléfono desea cambiar\n");
+					setColorText("Reset");
 					switch (current->phoneQty) {
 						case 10:
 							strcpy(phones[9],current->phone_10);
@@ -317,16 +406,80 @@ void modifyRegister(){
 						case 1:
 							strcpy(phones[0],current->phone_1);
 							break;
+					}
 
-					for (int i; i<current->phoneQty; i++) {
+					for (int i=current->phoneQty-1; i>=0; i--) {
 						printf("Phone [%d]: %s\n",i+1,phones[i]);
-					}	
+					}
 					
 					captureData(sizeof(NUMBER), &buffer);
 					option = getNumber(buffer);
+					switch(option){
+						case 10:
+							printf("Previus Phone Number: %s \n", current->phone_10);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_10, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_10);
+							break;
+						case 9:
+							printf("Previus Phone Number: %s \n", current->phone_9);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_9, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_9);
+							break;
+						case 8:
+							printf("Previus Phone Number: %s \n", current->phone_8);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_8, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_8);
+							break;
+						case 7:
+							printf("Previus Phone Number: %s \n", current->phone_7);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_7, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_7);
+							break;
+						case 6:
+							printf("Previus Phone Number: %s \n", current->phone_6);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_6, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_6);
+							break;
+						case 5:
+							printf("Previus Phone Number: %s \n", current->phone_5);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_5, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_5);
+							break;
+						case 4:
+							printf("Previus Phone Number: %s \n", current->phone_4);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_4, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_4);
+							break;
+						case 3:
+							printf("Previus Phone Number: %s \n", current->phone_3);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_3, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_3);
+							break;
+						case 2:
+							printf("Previus Phone Number: %s \n", current->phone_2);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_2, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_2);
+							break;
+						case 1:
+							printf("Previus Phone Number: %s \n", current->phone_1);
+							captureData(sizeof(PHONE), &buffer);
+							strcpy(current->phone_1, buffer);
+							printf("Nuevo número de teléfono guardado: %s\n", current->phone_1);
+							break;
 
-							
-					}
+				
+						}
+					break;
+				case 6:
 					break;
 
 			}
@@ -356,6 +509,7 @@ void deleteRegister(){
 
 		while (current) {
 			if(current->id == id){
+				global.saved = 0;
 				if(current->head == 1){
 					if(global.qtyContacts == 1){
 						global.headNodes = NULL;
@@ -379,7 +533,7 @@ void deleteRegister(){
 					found = 1;
 					global.qtyContacts--;
 				}
-				printf("Registro #%d eliminado \n");
+				printf("Registro #%d eliminado \n", current->id);
 			} else {
 				if(current->head == 1){
 					current = current->next;

@@ -33,27 +33,34 @@ do
     {
     case 1:
         createRegister();
+	showMainMenu();
         break;
     case 2:
         deleteRegister();
+	showMainMenu();
         break;
     case 3:
         seekRegister();
+	showMainMenu();
         break;
     case 4:
         modifyRegister();
+	showMainMenu();
         break;
     case 5:
         showRegistry(global.headNodes);
+	showMainMenu();
         break;
     case 6:
         save();
+	showMainMenu();
         break;
     case 7:
         exitProgram();
         break;
     case 8:
         exportdata();
+	showMainMenu();
         break;
     default:
         printf("\033[0;31m");
