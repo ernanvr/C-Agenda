@@ -9,5 +9,6 @@ void printNodesWphones(CONTACT * nodeHead);
 void printNodesWophones(CONTACT * nodeHead);
 void exitProgram();
 void setColorText(char color[12]);
+void destroyNodes();
 
 #endif

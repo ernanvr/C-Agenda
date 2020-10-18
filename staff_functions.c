@@ -5,6 +5,17 @@
 #include "mainmenu.h"
 #include "staff_functions.h"
 
+void destroyNodes(){
+	CONTACT *current, *temp;
+	current = global.headNodes;
+
+	while(current){
+		temp = current;
+		current=current->next;
+		free(current);
+	}	
+	
+}
 int getNumber(char * word){
     char * wordEnd;
     int number;
@@ -147,6 +158,7 @@ void exitProgram(){
 		while(!loopEnd){
 			captureData(sizeof(BUFFER),&buffer);
 			if(!strcmp(buffer,"y")){
+				destroyNodes();
 				exit(0);
 			} else if(!strcmp(buffer,"N")){
 				showMainMenu();
@@ -155,6 +167,7 @@ void exitProgram(){
 			}
 		}
 	} else {
+		destroyNodes();
 		exit(0);
 	}
 }

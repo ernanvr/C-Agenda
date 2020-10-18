@@ -151,7 +151,7 @@ void seekRegister(){
 	BUFFER buffer;
 	PHONE phones[10]={0};
 	int number;
-	current = global.headNodes;	
+		current = global.headNodes;	
 	
 
 	if (global.qtyContacts) {
@@ -493,7 +493,7 @@ void modifyRegister(){
 void deleteRegister(){
 	CONTACT *previous = NULL, *current = NULL, *temp = NULL;
 	BUFFER buffer;
-	int id = 0, found = 0;
+	int id = 0, found = 0, idDeleted=0;
 
 
 	if(global.qtyContacts){
@@ -509,17 +509,16 @@ void deleteRegister(){
 
 		while (current) {
 			if(current->id == id){
+				idDeleted=current->id;
 				global.saved = 0;
 				if(current->head == 1){
 					if(global.qtyContacts == 1){
 						global.headNodes = NULL;
 						current = current->next;
 					} else {
-						current->head = 0;
 						current = current->next;
 						current->head = 1;
 						global.headNodes = current;
-						previous->next=NULL;
 					}
 					free(previous);
 					found = 1;
@@ -533,7 +532,7 @@ void deleteRegister(){
 					found = 1;
 					global.qtyContacts--;
 				}
-				printf("Registro #%d eliminado \n", current->id);
+				printf("Registro #%d eliminado \n", idDeleted);
 			} else {
 				if(current->head == 1){
 					current = current->next;
