@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern GLOBAL global;
+
 int save(){
 	CONTACT *start, *current;
 	short contactsQuantity = 0;

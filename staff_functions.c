@@ -5,7 +5,10 @@
 #include "mainmenu.h"
 #include "staff_functions.h"
 
+extern GLOBAL global;
+
 void destroyNodes(){
+
 	CONTACT *current, *temp;
 	current = global.headNodes;
 

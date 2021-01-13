@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <sys/types.h>
 
+extern GLOBAL global;
+
 void createRegister(){
     FIRSTNAME name; 
     LASTNAME lastname;

@@ -7,6 +7,8 @@
 #include "mainmenu.h"
 #include "binarydata.h"
 
+GLOBAL global; 
+
 void clearScreen();
 
 int main(void){

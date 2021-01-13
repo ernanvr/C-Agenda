@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+extern GLOBAL global;
 
 void showMainMenu(){
         BUFFER buffer;

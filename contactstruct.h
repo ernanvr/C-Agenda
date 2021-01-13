@@ -23,12 +23,12 @@ typedef struct Contact{
     struct Contact * next;
 } CONTACT;
 
-struct Global
+typedef struct Global
 {
     CONTACT * headNodes;
     int idsequence;
     short qtyContacts;
     unsigned short saved;
-}global;
+}GLOBAL;
 
 #endif
